@@ -1,9 +1,13 @@
 'use client';
 
-import '@/lib/env';
+/* eslint-disable simple-import-sort/imports */
+
 import * as React from 'react';
+import { toast } from 'react-hot-toast';
 
 import Button from '@/components/buttons/Button';
+
+import '@/lib/env';
 
 // !STARTERCONF -> Select !STARTERCONF and CMD + SHIFT + F
 // Before you begin editing, follow all comments with `STARTERCONF`,
@@ -31,6 +35,7 @@ export default function HomePage() {
         body: JSON.stringify({ confession }),
       });
       setConfession('');
+      toast.success('Confession is submitted');
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Failed to submit confession', error);
