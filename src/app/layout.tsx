@@ -5,7 +5,6 @@ import '@/styles/colors.css';
 import '@/styles/globals.css';
 
 import ClientToaster from '@/components/ClientToaster';
-import ThemeToggle from '@/components/ThemeToggle';
 
 // !STARTERCONF This is for demo purposes, remove @/styles/colors.css import immediately
 import { siteConfig } from '@/constant/config';
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   // !STARTERCONF this is the default favicon, you can generate your own from https://realfavicongenerator.net/
   // ! copy to /favicon folder
   icons: {
-    icon: '/favicon/favicon.ico',
+    icon: '/favicon.ico',
     shortcut: '/favicon/favicon-16x16.png',
     apple: '/favicon/apple-touch-icon.png',
   },
@@ -60,9 +59,7 @@ export default function RootLayout({
   return (
     <html>
       <body className='bg-white text-black dark:bg-neutral-900 dark:text-white'>
-        <ThemeToggle />
         <ClientToaster />
-
         {children}
       </body>
     </html>
