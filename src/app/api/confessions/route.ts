@@ -24,6 +24,8 @@ export async function POST(request: Request) {
   try {
     const { confession } = await request.json();
 
+    console.log("confession", confession)
+
     // Persist the new confession to the database using Supabase
     const { data, error } = await supabase
       .from('confessions')
