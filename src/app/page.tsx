@@ -57,7 +57,7 @@ export default function HomePage() {
           ref={textareaRef}
           value={confession}
           onChange={(e) => setConfession(e.target.value)}
-          placeholder="you really think you can keep that secret??? click anywhere to type."
+          placeholder="tell us your secrets… we promise we’ll only judge a little."
           className='h-64 w-full resize-none text-3xl rounded-sm bg-transparent p-4 font-mono placeholder:italic placeholder:text-neutral-600 outline-none focus:border-none focus:ring-0 text-center border-none'
         />
         {confession.trim() && (
@@ -68,7 +68,7 @@ export default function HomePage() {
             isLoading={isLoading}
             disabled={isLoading}
           >
-            Submit Confession
+            Submit
           </Button>
         )}
       </form>
