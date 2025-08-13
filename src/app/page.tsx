@@ -12,6 +12,7 @@ import Button from '@/components/buttons/Button';
 export default function HomePage() {
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
   const [confession, setConfession] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(false);
 
   function handlePageClick(e: React.MouseEvent<HTMLDivElement>) {
     const target = e.target as HTMLElement;
@@ -23,6 +24,7 @@ export default function HomePage() {
     e.preventDefault();
     if (!confession.trim()) return;
     try {
+      setIsLoading(true);
       await fetch('/api/confessions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -30,14 +32,17 @@ export default function HomePage() {
       });
       setConfession('');
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Failed to submit confession', error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
   return (
     <main
       onClick={handlePageClick}
-      className='flex min-h-screen flex-col items-center justify-center bg-white px-4'
+      className='flex min-h-screen flex-col items-center justify-center dark:bg-neutral-900 px-4'
     >
       <form
         onSubmit={handleSubmit}
@@ -47,11 +52,17 @@ export default function HomePage() {
           ref={textareaRef}
           value={confession}
           onChange={(e) => setConfession(e.target.value)}
-          placeholder="start typing your confession and press submit when you're done"
-          className='h-64 w-full resize-none text-3xl rounded-sm bg-transparent p-4 font-mono placeholder:italic placeholder:text-neutral-300 outline-none focus:border-none focus:ring-0 text-center border-none'
+          placeholder="you really think you can keep that secret??? click anywhere to type."
+          className='h-64 w-full resize-none text-3xl rounded-sm bg-transparent p-4 font-mono placeholder:italic placeholder:text-neutral-600 outline-none focus:border-none focus:ring-0 text-center border-none'
         />
         {confession.trim() && (
-          <Button type='submit' className='cursor-pointer !text-2xl !mx-8 !my-2' variant='gradient' size='base'>
+          <Button
+            type='submit'
+            className='cursor-pointer'
+            variant='gradient'
+            isLoading={isLoading}
+            disabled={isLoading}
+          >
             Submit Confession
           </Button>
         )}
