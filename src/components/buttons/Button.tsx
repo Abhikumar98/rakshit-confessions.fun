@@ -5,8 +5,8 @@ import { ImSpinner2 } from 'react-icons/im';
 
 import { cn } from '@/lib/utils';
 
-const ButtonVariant = ['primary', 'outline', 'ghost', 'light', 'dark'] as const;
-const ButtonSize = ['sm', 'base'] as const;
+const ButtonVariant = ['primary', 'outline', 'ghost', 'light', 'dark', 'gradient'] as const;
+const ButtonSize = ['sm', 'base', 'lg'] as const;
 
 type ButtonProps = {
   isLoading?: boolean;
@@ -90,6 +90,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               'border border-gray-600',
               'hover:bg-gray-800 active:bg-gray-700 disabled:bg-gray-700',
             ],
+            variant === 'gradient' && [
+              'bg-gradient-to-r from-purple-600 via-blue-500 to-green-400 text-white',
+              'border-none',
+              'hover:opacity-90 active:opacity-100 disabled:opacity-60',
+            ],
           ],
           //#endregion  //*======== Variants ===========
           'disabled:cursor-not-allowed',
@@ -118,6 +123,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             className={cn([
               size === 'base' && 'mr-1',
               size === 'sm' && 'mr-1.5',
+              size === 'lg' && 'mr-2 text-lg',
             ])}
           >
             <LeftIcon
@@ -138,7 +144,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             className={cn([
               size === 'base' && 'ml-1',
               size === 'sm' && 'ml-1.5',
-            ])}
+              size === 'lg' && 'ml-2 text-lg',
+              ])}
           >
             <RightIcon
               size='1em'
@@ -146,7 +153,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
                 [
                   size === 'base' && 'text-md md:text-md',
                   size === 'sm' && 'md:text-md text-sm',
-                ],
+                  size === 'lg' && 'md:text-lg text-lg',
+                  ],
                 classNames?.rightIcon
               )}
             />

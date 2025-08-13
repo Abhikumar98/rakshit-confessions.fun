@@ -1,68 +1,61 @@
 'use client';
 
-import * as React from 'react';
 import '@/lib/env';
+import * as React from 'react';
 
-import ArrowLink from '@/components/links/ArrowLink';
-import ButtonLink from '@/components/links/ButtonLink';
-import UnderlineLink from '@/components/links/UnderlineLink';
-import UnstyledLink from '@/components/links/UnstyledLink';
-
-/**
- * SVGR Support
- * Caveat: No React Props Type.
- *
- * You can override the next-env if the type is important to you
- * @see https://stackoverflow.com/questions/68103844/how-to-override-next-js-svg-module-declaration
- */
-import Logo from '~/svg/Logo.svg';
+import Button from '@/components/buttons/Button';
 
 // !STARTERCONF -> Select !STARTERCONF and CMD + SHIFT + F
 // Before you begin editing, follow all comments with `STARTERCONF`,
 // to customize the default configuration.
 
 export default function HomePage() {
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+  const [confession, setConfession] = React.useState('');
+
+  function handlePageClick(e: React.MouseEvent<HTMLDivElement>) {
+    const target = e.target as HTMLElement;
+    if (target.closest('button')) return;
+    textareaRef.current?.focus();
+  }
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!confession.trim()) return;
+    try {
+      await fetch('/api/confessions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ confession }),
+      });
+      setConfession('');
+    } catch (error) {
+      console.error('Failed to submit confession', error);
+    }
+  }
+
   return (
-    <main>
-      <section className='bg-white'>
-        <div className='layout relative flex min-h-screen flex-col items-center justify-center py-12 text-center'>
-          <Logo className='w-16' />
-          <h1 className='mt-4'>Next.js + Tailwind CSS + TypeScript Starter</h1>
-          <p className='mt-2 text-sm text-gray-800'>
-            A starter for Next.js, Tailwind CSS, and TypeScript with Absolute
-            Import, Seo, Link component, pre-configured with Husky{' '}
-          </p>
-          <p className='mt-2 text-sm text-gray-700'>
-            <ArrowLink href='https://github.com/theodorusclarence/ts-nextjs-tailwind-starter'>
-              See the repository
-            </ArrowLink>
-          </p>
-
-          <ButtonLink className='mt-6' href='/components' variant='light'>
-            See all components
-          </ButtonLink>
-
-          <UnstyledLink
-            href='https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2Ftheodorusclarence%2Fts-nextjs-tailwind-starter'
-            className='mt-4'
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              width='92'
-              height='32'
-              src='https://vercel.com/button'
-              alt='Deploy with Vercel'
-            />
-          </UnstyledLink>
-
-          <footer className='absolute bottom-2 text-gray-700'>
-            © {new Date().getFullYear()} By{' '}
-            <UnderlineLink href='https://theodorusclarence.com?ref=tsnextstarter'>
-              Theodorus Clarence
-            </UnderlineLink>
-          </footer>
-        </div>
-      </section>
+    <main
+      onClick={handlePageClick}
+      className='flex min-h-screen flex-col items-center justify-center bg-white px-4'
+    >
+      <form
+        onSubmit={handleSubmit}
+        className='flex w-full max-w-2xl flex-col items-center gap-4'
+      >
+        <textarea
+          ref={textareaRef}
+          value={confession}
+          onChange={(e) => setConfession(e.target.value)}
+          placeholder="start typing your confession and press submit when you're done"
+          className='h-64 w-full resize-none text-3xl rounded-sm bg-transparent p-4 font-mono placeholder:italic placeholder:text-neutral-300 outline-none focus:border-none focus:ring-0 text-center border-none'
+        />
+        {confession.trim() && (
+          <Button type='submit' className='cursor-pointer !text-2xl !mx-8 !my-2' variant='gradient' size='base'>
+            Submit Confession
+          </Button>
+        )}
+      </form>
     </main>
   );
 }
